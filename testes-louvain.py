@@ -7,8 +7,13 @@ grafo = ig.Graph.Read_GraphMLz('grafo_50k.graphml.gz')
 comunidades = grafo.community_multilevel()
 
 # Exibir as comunidades detectadas
+j = 0
 for i, comunidade in enumerate(comunidades):
-    print(f"Comunidade {i}: {comunidade}")
+    if len(comunidade) > 100:
+        j += 1
+        print(f"Comunidade {i}: {comunidade}")
+
+print(f'{j} pontos detectados')
 
 # Opcional: Salvar as comunidades como atributo dos vértices para visualização
 grafo.vs["comunidade"] = comunidades.membership

@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+import pandas as pd
 # transformar o horario militar do dataset para timedelta, para facilitar calculo da diferença de horario
 def militar_para_timedelta(horario):
     
@@ -23,3 +23,42 @@ def diferenca_horario(horario1, horario2):
     diferenca_via_meia_noite = timedelta(days=1) - diferenca_direta
     
     return min(diferenca_direta, diferenca_via_meia_noite)
+
+def gerar_perfil(idade, sexo, descendencia):
+    if idade == 0:
+        idade = None
+    if pd.isna(sexo):
+        sexo = None
+    if pd.isna(descendencia):
+        descendencia = None
+    perfil = {
+        'idade': idade,
+        'sexo': sexo,
+        'descendencia': descendencia
+    }
+    return perfil
+
+# retorna peso de comparacao entre os perfis de vitima
+def comparar_vitimas(vitima1, vitima2):
+    peso_idade = 0
+    peso_sexo = 0
+    peso_descendencia = 0
+
+    if vitima1['idade'] == None or vitima2['idade'] == None:
+        peso_idade = 0.5
+    else:
+        peso_idade = 1 - (abs(vitima1['idade'] - vitima2['idade']) / 100)
+
+    if vitima1['sexo'] == None or vitima2['sexo'] == None:
+        peso_sexo = 0.5
+    elif vitima1['sexo'].strip() == vitima2['sexo'].strip():
+        peso_sexo = 1
+    
+    if vitima1['descendencia'] == None or vitima2['descendencia'] == None:
+        peso_descendencia = 0.5
+    elif vitima1['descendencia'].strip() == vitima2['descendencia'].strip():
+        peso_descendencia = 1
+
+    peso_perfil = peso_idade * 0.40 + peso_sexo * 0.30 + peso_descendencia * 0.30
+
+    return peso_perfil

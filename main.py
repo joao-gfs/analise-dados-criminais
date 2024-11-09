@@ -9,11 +9,14 @@ from geopy.distance import geodesic
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 1000
+DISTANCIA_OCORRENCIAS = 500
+
+# quantidade de ocorrencias para teste
+Q_OCC = 30000
 
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
-df = df.head(15000) # grafo menor para testes, remover na aplicação real
+df = df.head(Q_OCC) # grafo menor para testes, remover na aplicação real
 
 # extração dos atributos uteis
 latitudes = np.array(df['LAT'])
@@ -38,12 +41,12 @@ g.vs['latitude'] = latitudes
 g.vs['longitude'] = longitudes
 g.vs['horario'] = [fa.militar_para_timedelta(x) for x in df['TIME OCC']] # transformar horarios em timedelta (facilita cálculos)
 g.vs['cat_crime'] = [fa.obter_categoria(codigo) for codigo in df['Crm Cd']]
+g.vs['mocodes'] = [str(x).split() for x in df['Mocodes']]
 
 g.vs['perfil_vitima'] = df.apply(
     lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), 
     axis=1
 ).tolist()
-
 
 # listas para as arestas e pesos 
 arestas = []
@@ -61,7 +64,7 @@ for i, coord in enumerate(coords_rad):
             peso_distancia = 0 # ok
             peso_horario = 0 # ok
             peso_crime = 0 # ok
-            peso_mocodes = 0
+            peso_mocodes = 0 # ok
             peso_vitima = 0 # ok
             peso_arma = 0
             peso_crm_cds = 0
@@ -82,7 +85,9 @@ for i, coord in enumerate(coords_rad):
 
             peso_crime = fa.comparar_categorias(vi['cat_crime'], vj['cat_crime'])
 
-            #peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 * peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
+            peso_mocodes = fa.comparar_mocodes(vi['mocodes'], vj['mocodes'])
+
+            peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
             arestas.append((i, j))
             pesos.append(peso_final)
 
@@ -93,8 +98,9 @@ g.es['weight'] = pesos
 # aplica o algoritmo de Louvain para identificar as comunidades
 communities = g.community_multilevel(weights=g.es['weight'])
 
+g.vs['comunidade'] = communities.membership
 # exibir as comunidades
 #for i, community in enumerate(communities):
 #    print(f"Comunidade {i}: {community}")
 
-#g.write_graphml("grafo_comunidades.graphml")
+g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_ocorrencias.graphml")

@@ -94,3 +94,23 @@ def comparar_vitimas(vitima1, vitima2):
 
     return peso_perfil
 
+def comparar_mocodes(mocodes1, mocodes2):
+
+    if '1501' in mocodes1:
+        mocodes1.remove('1501')
+    if '1501' in mocodes2:
+        mocodes2.remove('1501')
+
+    set1 = set(mocodes1)
+    set2 = set(mocodes2)
+
+    mocodes_em_comum = set1.intersection(set2)
+
+    total_mocodes = set1.union(set2)
+
+    if not total_mocodes:
+        return 0
+
+    peso_mocodes = len(mocodes_em_comum) / len(total_mocodes)
+
+    return peso_mocodes

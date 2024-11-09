@@ -60,7 +60,7 @@ for i, coord in enumerate(coords_rad):
             peso_final = 0
             peso_distancia = 0 # ok
             peso_horario = 0 # ok
-            peso_crime = 0 # on going
+            peso_crime = 0 # fazendo
             peso_mocodes = 0
             peso_vitima = 0 # ok
             peso_arma = 0

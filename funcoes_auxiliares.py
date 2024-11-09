@@ -14,6 +14,18 @@ categorias_crime = {
     "golpes": [940, 662, 664, 666]
 }
 
+def obter_categoria(codigo_crime):
+    for categoria, codigos in categorias_crime.items():
+        if codigo_crime in codigos:
+            return categoria
+    return "Indefinido"
+
+def comparar_categorias(cat1, cat2):
+    peso = 0
+    if cat1 == cat2:
+        peso = 1
+    if cat1 == 'agressao leve' and cat2 == 
+
 # transformar o horario militar do dataset para timedelta, para facilitar calculo da diferença de horario
 def militar_para_timedelta(horario):
     

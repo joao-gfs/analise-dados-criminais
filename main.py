@@ -36,7 +36,8 @@ raio_radianos = DISTANCIA_OCORRENCIAS / 6371000
 g = ig.Graph(n=len(coord_ocorrencias))
 g.vs['latitude'] = latitudes
 g.vs['longitude'] = longitudes
-g.vs['horario'] = [fa.militar_para_horariodelta(x) for x in df['horario OCC']] # transformar horarios em horariodelta (facilita cálculos)
+g.vs['horario'] = [fa.militar_para_timedelta(x) for x in df['TIME OCC']] # transformar horarios em timedelta (facilita cálculos)
+g.vs['cat_crime'] = [fa.obter_categoria(codigo) for codigo in df['Crm Cd']]
 
 g.vs['perfil_vitima'] = df.apply(
     lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), 
@@ -68,6 +69,7 @@ for i, coord in enumerate(coords_rad):
             vi = g.vs[i]
             vj = g.vs[j]
    
+            print(vi['cat_crime'])
             dist_metros = geodesic((vi['latitude'], vi['longitude']), (vj['latitude'], vj['longitude'])).meters
             peso_distancia = 1 - (dist_metros / DISTANCIA_OCORRENCIAS)
 

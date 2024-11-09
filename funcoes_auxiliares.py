@@ -22,10 +22,10 @@ def obter_categoria(codigo_crime):
 
 def comparar_categorias(cat1, cat2):
     peso = 0
-    if cat1 == cat2:
-        peso = 1
     if 'agressao' in cat1 and 'agressao' in cat2:
         peso = 0.75
+    if cat1 == cat2:
+        peso = 1
     if (cat1 == 'agressao grave' and cat2 == 'homicidio') or (cat1 == 'homicidio' and cat2 == 'agressao grave'):
         peso == 0.25
 

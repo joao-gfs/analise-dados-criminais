@@ -13,7 +13,7 @@ DISTANCIA_OCORRENCIAS = 1000
 
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
-df = df.head(50) # grafo menor para testes, remover na aplicação real
+df = df.head(15000) # grafo menor para testes, remover na aplicação real
 
 # extração dos atributos uteis
 latitudes = np.array(df['LAT'])
@@ -60,7 +60,7 @@ for i, coord in enumerate(coords_rad):
             peso_final = 0
             peso_distancia = 0 # ok
             peso_horario = 0 # ok
-            peso_crime = 0 # fazendo funcao
+            peso_crime = 0 # ok
             peso_mocodes = 0
             peso_vitima = 0 # ok
             peso_arma = 0
@@ -73,17 +73,14 @@ for i, coord in enumerate(coords_rad):
             peso_distancia = 1 - (dist_metros / DISTANCIA_OCORRENCIAS)
 
             diferenca_horario = fa.diferenca_horario(vi['horario'], vj['horario'])
-            #print(vi['horario'], vj['horario'])
-            #print(dist_metros, diferenca_horario)
-            # Calcula o peso do horário com uma função exponencial
-            peso_horario = exp(-ALPHA_TEMPO * (diferenca_horario.total_seconds() / 3600))
-            #print(f'D = {peso_distancia} - T = {peso_horario}')
 
+            # calcula o peso do horário com uma função exponencial, que é não linear
+            # o calculo não linear faz com que horarios mais próximos gerem proporcionalmente mais peso
+            peso_horario = exp(-ALPHA_TEMPO * (diferenca_horario.total_seconds() / 3600))
+ 
             peso_vitima = fa.comparar_vitimas(vi['perfil_vitima'], vj['perfil_vitima'])
-            print(vi['perfil_vitima'])
-            print(vj['perfil_vitima'])
-            print(peso_vitima)
-            print()
+
+            peso_crime = fa.comparar_categorias(vi['cat_crime'], vj['cat_crime'])
 
             #peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 * peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
             arestas.append((i, j))

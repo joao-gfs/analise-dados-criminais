@@ -60,7 +60,7 @@ for i, coord in enumerate(coords_rad):
             peso_final = 0
             peso_distancia = 0 # ok
             peso_horario = 0 # ok
-            peso_crime = 0 # fazendo
+            peso_crime = 0 # fazendo funcao
             peso_mocodes = 0
             peso_vitima = 0 # ok
             peso_arma = 0
@@ -68,8 +68,7 @@ for i, coord in enumerate(coords_rad):
 
             vi = g.vs[i]
             vj = g.vs[j]
-   
-            print(vi['cat_crime'])
+
             dist_metros = geodesic((vi['latitude'], vi['longitude']), (vj['latitude'], vj['longitude'])).meters
             peso_distancia = 1 - (dist_metros / DISTANCIA_OCORRENCIAS)
 

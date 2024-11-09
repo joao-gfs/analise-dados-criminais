@@ -5,7 +5,6 @@ import numpy as np
 from math import exp
 from sklearn.neighbors import BallTree
 from geopy.distance import geodesic
-import matplotlib.pyplot as plt
 
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
@@ -13,7 +12,7 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 1000
 
 # carrega os dados do dataset já filtrado
-df = pd.read_csv('dataset-filtrado.csv')
+df = pd.read_csv('dados/dataset-filtrado.csv')
 df = df.head(50) # grafo menor para testes, remover na aplicação real
 
 # extração dos atributos uteis
@@ -100,4 +99,4 @@ communities = g.community_multilevel(weights=g.es['weight'])
 #for i, community in enumerate(communities):
 #    print(f"Comunidade {i}: {community}")
 
-g.write_graphml("grafo_comunidades.graphml")
+#g.write_graphml("grafo_comunidades.graphml")

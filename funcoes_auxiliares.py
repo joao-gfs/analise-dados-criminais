@@ -1,5 +1,19 @@
 from datetime import timedelta
 import pandas as pd
+
+categorias_crime = {
+    "homicidio": [110, 113],
+    "crime sexual": [121, 122, 815, 820, 821, 812, 813, 822, 845, 850, 860, 760, 762],
+    "roubo": [210, 220, 310, 320, 510, 520, 433, 330, 331, 410, 420, 421, 350, 351, 352, 353, 
+              450, 451, 452, 453, 341, 343, 345, 440, 441, 442, 443, 444, 445, 470, 471, 472, 
+              473, 474, 475, 480, 485, 487, 491, 522, 349, 446],
+    "agressao grave": [230, 231, 235, 236, 250, 251, 761, 926],
+    "agressao leve": [435, 436, 437, 622, 623, 624, 625, 626, 627, 647, 763, 928, 930],
+    "vandalismo": [648, 924, 740, 745, 753, 886, 888, 755, 884, 756],
+    "sequestro": [910, 920, 922],
+    "golpes": [940, 662, 664, 666]
+}
+
 # transformar o horario militar do dataset para timedelta, para facilitar calculo da diferença de horario
 def militar_para_timedelta(horario):
     
@@ -62,3 +76,4 @@ def comparar_vitimas(vitima1, vitima2):
     peso_perfil = peso_idade * 0.40 + peso_sexo * 0.30 + peso_descendencia * 0.30
 
     return peso_perfil
+

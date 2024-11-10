@@ -12,7 +12,7 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 500
 
 # quantidade de ocorrencias para teste
-Q_OCC = 30000
+Q_OCC = 15000
 
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
@@ -42,6 +42,7 @@ g.vs['longitude'] = longitudes
 g.vs['horario'] = [fa.militar_para_timedelta(x) for x in df['TIME OCC']] # transformar horarios em timedelta (facilita cálculos)
 g.vs['cat_crime'] = [fa.obter_categoria(codigo) for codigo in df['Crm Cd']]
 g.vs['mocodes'] = [str(x).split() for x in df['Mocodes']]
+g.vs['cat_arma'] = [fa.obter_categoria(codigo) for codigo in df['Weapon Used Cd']]
 
 g.vs['perfil_vitima'] = df.apply(
     lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), 
@@ -86,6 +87,8 @@ for i, coord in enumerate(coords_rad):
             peso_crime = fa.comparar_categorias(vi['cat_crime'], vj['cat_crime'])
 
             peso_mocodes = fa.comparar_mocodes(vi['mocodes'], vj['mocodes'])
+            
+            peso_arma = fa.comparar_tipos_arma(vi['cat_arma'], vj['cat_arma'])
 
             peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
             arestas.append((i, j))

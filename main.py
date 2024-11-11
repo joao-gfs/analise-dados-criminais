@@ -12,17 +12,16 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 500
 
 # quantidade de ocorrencias para teste
-Q_OCC = 15000
+Q_OCC = 100
 
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
 df = df.head(Q_OCC) # grafo menor para testes, remover na aplicação real
 
-# extração dos atributos uteis
 latitudes = np.array(df['LAT'])
 longitudes = np.array(df['LON'])
 
-# junta os grafos
+#junta os dados em tuplas
 coord_ocorrencias = np.column_stack((latitudes, longitudes))
 
 # converte latitudes e longitudes para radianos para usar na BallTree
@@ -58,6 +57,8 @@ for i, coord in enumerate(coords_rad):
     if i % 1000 == 0:
         print(i)
 
+    vi = g.vs[i]
+
     indices = ball_tree.query_radius([coord], r=raio_radianos)[0]
     for j in indices:
         if i < j:  # evita duplicação de arestas
@@ -67,10 +68,9 @@ for i, coord in enumerate(coords_rad):
             peso_crime = 0 # ok
             peso_mocodes = 0 # ok
             peso_vitima = 0 # ok
-            peso_arma = 0
+            peso_arma = 0 # ok
             peso_crm_cds = 0
 
-            vi = g.vs[i]
             vj = g.vs[j]
 
             dist_metros = geodesic((vi['latitude'], vi['longitude']), (vj['latitude'], vj['longitude'])).meters
@@ -89,6 +89,8 @@ for i, coord in enumerate(coords_rad):
             peso_mocodes = fa.comparar_mocodes(vi['mocodes'], vj['mocodes'])
             
             peso_arma = fa.comparar_tipos_arma(vi['cat_arma'], vj['cat_arma'])
+
+            #print(f'{i},{j} - H: {peso_horario} - V: {peso_vitima} - C: {peso_crime} - M: {peso_mocodes} - A: {peso_arma}')
 
             peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
             arestas.append((i, j))

@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_latitude" for="node" attr.name="latitude" attr.type="double"/>
+  <key id="v_longitude" for="node" attr.name="longitude" attr.type="double"/>
+  <key id="v_cat_crime" for="node" attr.name="cat_crime" attr.type="string"/>
+  <key id="v_cat_arma" for="node" attr.name="cat_arma" attr.type="string"/>
+  <key id="v_comunidade" for="node" attr.name="comunidade" attr.type="double"/>
+  <key id="e_weight" for="edge" attr.name="weight" attr.type="double"/>
+  <graph id="G" edgedefault="undirected">
+    <node id="n0">
+      <data key="v_latitude">34.0444</data>
+      <data key="v_longitude">-118.2628</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">0</data>
+    </node>
+    <node id="n1">
+      <data key="v_latitude">34.0452</data>
+      <data key="v_longitude">-118.3351</data>
+      <data key="v_cat_crime">agressao grave</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">1</data>
+    </node>
+    <node id="n2">
+      <data key="v_latitude">34.1192</data>
+      <data key="v_longitude">-118.3004</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">2</data>
+    </node>
+    <node id="n3">
+      <data key="v_latitude">34.1142</data>
+      <data key="v_longitude">-118.2652</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">3</data>
+    </node>
+    <node id="n4">
+      <data key="v_latitude">34.0403</data>
+      <data key="v_longitude">-118.2421</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">4</data>
+    </node>
+    <node id="n5">
+      <data key="v_latitude">34.244</data>
+      <data key="v_longitude">-118.5583</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">5</data>
+    </node>
+    <node id="n6">
+      <data key="v_latitude">34.1428</data>
+      <data key="v_longitude">-118.2261</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">6</data>
+    </node>
+    <node id="n7">
+      <data key="v_latitude">33.9788</data>
+      <data key="v_longitude">-118.4151</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">7</data>
+    </node>
+    <node id="n8">
+      <data key="v_latitude">34.1412</data>
+      <data key="v_longitude">-118.3681</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">8</data>
+    </node>
+    <node id="n9">
+      <data key="v_latitude">34.0191</data>
+      <data key="v_longitude">-118.2977</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">9</data>
+    </node>
+    <node id="n10">
+      <data key="v_latitude">34.0524</data>
+      <data key="v_longitude">-118.2842</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">10</data>
+    </node>
+    <node id="n11">
+      <data key="v_latitude">34.2573</data>
+      <data key="v_longitude">-118.463</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">11</data>
+    </node>
+    <node id="n12">
+      <data key="v_latitude">34.0473</data>
+      <data key="v_longitude">-118.2827</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">12</data>
+    </node>
+    <node id="n13">
+      <data key="v_latitude">34.2428</data>
+      <data key="v_longitude">-118.5338</data>
+      <data key="v_cat_crime">golpes</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">13</data>
+    </node>
+    <node id="n14">
+      <data key="v_latitude">34.0689</data>
+      <data key="v_longitude">-118.2841</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">14</data>
+    </node>
+    <node id="n15">
+      <data key="v_latitude">34.1576</data>
+      <data key="v_longitude">-118.4389</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">15</data>
+    </node>
+    <node id="n16">
+      <data key="v_latitude">34.0416</data>
+      <data key="v_longitude">-118.255</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">16</data>
+    </node>
+    <node id="n17">
+      <data key="v_latitude">34.0536</data>
+      <data key="v_longitude">-118.2788</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">17</data>
+    </node>
+    <node id="n18">
+      <data key="v_latitude">33.9601</data>
+      <data key="v_longitude">-118.2768</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">18</data>
+    </node>
+    <node id="n19">
+      <data key="v_latitude">34.0745</data>
+      <data key="v_longitude">-118.3742</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">19</data>
+    </node>
+    <node id="n20">
+      <data key="v_latitude">34.2012</data>
+      <data key="v_longitude">-118.5133</data>
+      <data key="v_cat_crime">agressao grave</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">20</data>
+    </node>
+    <node id="n21">
+      <data key="v_latitude">34.2204</data>
+      <data key="v_longitude">-118.5579</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">21</data>
+    </node>
+    <node id="n22">
+      <data key="v_latitude">33.9775</data>
+      <data key="v_longitude">-118.4065</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">22</data>
+    </node>
+    <node id="n23">
+      <data key="v_latitude">33.7421</data>
+      <data key="v_longitude">-118.3102</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">23</data>
+    </node>
+    <node id="n24">
+      <data key="v_latitude">34.0108</data>
+      <data key="v_longitude">-118.3135</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">24</data>
+    </node>
+    <node id="n25">
+      <data key="v_latitude">34.0744</data>
+      <data key="v_longitude">-118.3711</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">19</data>
+    </node>
+    <node id="n26">
+      <data key="v_latitude">34.1548</data>
+      <data key="v_longitude">-118.4487</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">25</data>
+    </node>
+    <node id="n27">
+      <data key="v_latitude">34.1961</data>
+      <data key="v_longitude">-118.4793</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">26</data>
+    </node>
+    <node id="n28">
+      <data key="v_latitude">34.0845</data>
+      <data key="v_longitude">-118.2726</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">27</data>
+    </node>
+    <node id="n29">
+      <data key="v_latitude">34.2276</data>
+      <data key="v_longitude">-118.45</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">28</data>
+    </node>
+    <node id="n30">
+      <data key="v_latitude">34.0337</data>
+      <data key="v_longitude">-118.2533</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">29</data>
+    </node>
+    <node id="n31">
+      <data key="v_latitude">33.7279</data>
+      <data key="v_longitude">-118.299</data>
+      <data key="v_cat_crime">agressao grave</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">30</data>
+    </node>
+    <node id="n32">
+      <data key="v_latitude">33.9431</data>
+      <data key="v_longitude">-118.401</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">31</data>
+    </node>
+    <node id="n33">
+      <data key="v_latitude">33.9401</data>
+      <data key="v_longitude">-118.2761</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">32</data>
+    </node>
+    <node id="n34">
+      <data key="v_latitude">34.0418</data>
+      <data key="v_longitude">-118.2852</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">33</data>
+    </node>
+    <node id="n35">
+      <data key="v_latitude">34.1032</data>
+      <data key="v_longitude">-118.3387</data>
+      <data key="v_cat_crime">agressao grave</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">34</data>
+    </node>
+    <node id="n36">
+      <data key="v_latitude">34.117</data>
+      <data key="v_longitude">-118.2717</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">35</data>
+    </node>
+    <node id="n37">
+      <data key="v_latitude">34.0659</data>
+      <data key="v_longitude">-118.1802</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">36</data>
+    </node>
+    <node id="n38">
+      <data key="v_latitude">34.0555</data>
+      <data key="v_longitude">-118.3762</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">37</data>
+    </node>
+    <node id="n39">
+      <data key="v_latitude">34.1732</data>
+      <data key="v_longitude">-118.6152</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">38</data>
+    </node>
+    <node id="n40">
+      <data key="v_latitude">33.9502</data>
+      <data key="v_longitude">-118.2673</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">39</data>
+    </node>
+    <node id="n41">
+      <data key="v_latitude">33.9779</data>
+      <data key="v_longitude">-118.4142</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">7</data>
+    </node>
+    <node id="n42">
+      <data key="v_latitude">33.9428</data>
+      <data key="v_longitude">-118.2781</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">32</data>
+    </node>
+    <node id="n43">
+      <data key="v_latitude">34.0587</data>
+      <data key="v_longitude">-118.4158</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">40</data>
+    </node>
+    <node id="n44">
+      <data key="v_latitude">34.0445</data>
+      <data key="v_longitude">-118.2116</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">41</data>
+    </node>
+    <node id="n45">
+      <data key="v_latitude">33.9801</data>
+      <data key="v_longitude">-118.2914</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">42</data>
+    </node>
+    <node id="n46">
+      <data key="v_latitude">34.1938</data>
+      <data key="v_longitude">-118.571</data>
+      <data key="v_cat_crime">golpes</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">43</data>
+    </node>
+    <node id="n47">
+      <data key="v_latitude">34.1721</data>
+      <data key="v_longitude">-118.3965</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">44</data>
+    </node>
+    <node id="n48">
+      <data key="v_latitude">34.1649</data>
+      <data key="v_longitude">-118.4661</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">45</data>
+    </node>
+    <node id="n49">
+      <data key="v_latitude">34.212</data>
+      <data key="v_longitude">-118.534</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">46</data>
+    </node>
+    <node id="n50">
+      <data key="v_latitude">34.0342</data>
+      <data key="v_longitude">-118.2496</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">29</data>
+    </node>
+    <node id="n51">
+      <data key="v_latitude">34.0415</data>
+      <data key="v_longitude">-118.262</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">0</data>
+    </node>
+    <node id="n52">
+      <data key="v_latitude">34.0484</data>
+      <data key="v_longitude">-118.2724</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">47</data>
+    </node>
+    <node id="n53">
+      <data key="v_latitude">33.7795</data>
+      <data key="v_longitude">-118.2715</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">48</data>
+    </node>
+    <node id="n54">
+      <data key="v_latitude">34.296</data>
+      <data key="v_longitude">-118.5502</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">49</data>
+    </node>
+    <node id="n55">
+      <data key="v_latitude">34.0926</data>
+      <data key="v_longitude">-118.3245</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">50</data>
+    </node>
+    <node id="n56">
+      <data key="v_latitude">34.2035</data>
+      <data key="v_longitude">-118.6294</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">51</data>
+    </node>
+    <node id="n57">
+      <data key="v_latitude">33.9818</data>
+      <data key="v_longitude">-118.3168</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">52</data>
+    </node>
+    <node id="n58">
+      <data key="v_latitude">34.2862</data>
+      <data key="v_longitude">-118.4133</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">53</data>
+    </node>
+    <node id="n59">
+      <data key="v_latitude">34.1325</data>
+      <data key="v_longitude">-118.3974</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">54</data>
+    </node>
+    <node id="n60">
+      <data key="v_latitude">33.7911</data>
+      <data key="v_longitude">-118.2849</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">55</data>
+    </node>
+    <node id="n61">
+      <data key="v_latitude">34.0881</data>
+      <data key="v_longitude">-118.1877</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">56</data>
+    </node>
+    <node id="n62">
+      <data key="v_latitude">33.9888</data>
+      <data key="v_longitude">-118.3089</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">57</data>
+    </node>
+    <node id="n63">
+      <data key="v_latitude">34.0198</data>
+      <data key="v_longitude">-118.3522</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">58</data>
+    </node>
+    <node id="n64">
+      <data key="v_latitude">34.118</data>
+      <data key="v_longitude">-118.2489</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">59</data>
+    </node>
+    <node id="n65">
+      <data key="v_latitude">34.2282</data>
+      <data key="v_longitude">-118.5885</data>
+      <data key="v_cat_crime">agressao grave</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">60</data>
+    </node>
+    <node id="n66">
+      <data key="v_latitude">34.0435</data>
+      <data key="v_longitude">-118.4565</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">61</data>
+    </node>
+    <node id="n67">
+      <data key="v_latitude">34.0582</data>
+      <data key="v_longitude">-118.2387</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">62</data>
+    </node>
+    <node id="n68">
+      <data key="v_latitude">34.0637</data>
+      <data key="v_longitude">-118.3562</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">63</data>
+    </node>
+    <node id="n69">
+      <data key="v_latitude">34.118</data>
+      <data key="v_longitude">-118.2489</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">59</data>
+    </node>
+    <node id="n70">
+      <data key="v_latitude">34.0364</data>
+      <data key="v_longitude">-118.4346</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">64</data>
+    </node>
+    <node id="n71">
+      <data key="v_latitude">34.023</data>
+      <data key="v_longitude">-118.2765</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">65</data>
+    </node>
+    <node id="n72">
+      <data key="v_latitude">34.1837</data>
+      <data key="v_longitude">-118.4443</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">66</data>
+    </node>
+    <node id="n73">
+      <data key="v_latitude">34.0464</data>
+      <data key="v_longitude">-118.2721</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">47</data>
+    </node>
+    <node id="n74">
+      <data key="v_latitude">34.2121</data>
+      <data key="v_longitude">-118.3856</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">67</data>
+    </node>
+    <node id="n75">
+      <data key="v_latitude">34.2215</data>
+      <data key="v_longitude">-118.4507</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">68</data>
+    </node>
+    <node id="n76">
+      <data key="v_latitude">34.2271</data>
+      <data key="v_longitude">-118.4503</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">28</data>
+    </node>
+    <node id="n77">
+      <data key="v_latitude">33.9793</data>
+      <data key="v_longitude">-118.4139</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">7</data>
+    </node>
+    <node id="n78">
+      <data key="v_latitude">33.9491</data>
+      <data key="v_longitude">-118.2893</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">69</data>
+    </node>
+    <node id="n79">
+      <data key="v_latitude">34.0354</data>
+      <data key="v_longitude">-118.4459</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">70</data>
+    </node>
+    <node id="n80">
+      <data key="v_latitude">34.0455</data>
+      <data key="v_longitude">-118.2432</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">71</data>
+    </node>
+    <node id="n81">
+      <data key="v_latitude">33.9785</data>
+      <data key="v_longitude">-118.2919</data>
+      <data key="v_cat_crime">golpes</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">42</data>
+    </node>
+    <node id="n82">
+      <data key="v_latitude">34.2345</data>
+      <data key="v_longitude">-118.4643</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">72</data>
+    </node>
+    <node id="n83">
+      <data key="v_latitude">34.1718</data>
+      <data key="v_longitude">-118.5338</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">73</data>
+    </node>
+    <node id="n84">
+      <data key="v_latitude">34.3082</data>
+      <data key="v_longitude">-118.4441</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">74</data>
+    </node>
+    <node id="n85">
+      <data key="v_latitude">34.0944</data>
+      <data key="v_longitude">-118.319</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">75</data>
+    </node>
+    <node id="n86">
+      <data key="v_latitude">33.8696</data>
+      <data key="v_longitude">-118.2863</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">76</data>
+    </node>
+    <node id="n87">
+      <data key="v_latitude">33.9949</data>
+      <data key="v_longitude">-118.4089</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">77</data>
+    </node>
+    <node id="n88">
+      <data key="v_latitude">34.0535</data>
+      <data key="v_longitude">-118.2491</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">78</data>
+    </node>
+    <node id="n89">
+      <data key="v_latitude">33.988</data>
+      <data key="v_longitude">-118.4703</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">79</data>
+    </node>
+    <node id="n90">
+      <data key="v_latitude">34.0448</data>
+      <data key="v_longitude">-118.2474</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">71</data>
+    </node>
+    <node id="n91">
+      <data key="v_latitude">33.9598</data>
+      <data key="v_longitude">-118.3962</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">80</data>
+    </node>
+    <node id="n92">
+      <data key="v_latitude">34.0453</data>
+      <data key="v_longitude">-118.2443</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">71</data>
+    </node>
+    <node id="n93">
+      <data key="v_latitude">34.1568</data>
+      <data key="v_longitude">-118.4864</data>
+      <data key="v_cat_crime">vandalismo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">81</data>
+    </node>
+    <node id="n94">
+      <data key="v_latitude">34.1822</data>
+      <data key="v_longitude">-118.4836</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">82</data>
+    </node>
+    <node id="n95">
+      <data key="v_latitude">34.1649</data>
+      <data key="v_longitude">-118.3921</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">83</data>
+    </node>
+    <node id="n96">
+      <data key="v_latitude">33.9334</data>
+      <data key="v_longitude">-118.2886</data>
+      <data key="v_cat_crime">crime sexual</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">84</data>
+    </node>
+    <node id="n97">
+      <data key="v_latitude">34.0467</data>
+      <data key="v_longitude">-118.252</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">71</data>
+    </node>
+    <node id="n98">
+      <data key="v_latitude">34.0617</data>
+      <data key="v_longitude">-118.3066</data>
+      <data key="v_cat_crime">roubo</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">85</data>
+    </node>
+    <node id="n99">
+      <data key="v_latitude">33.9943</data>
+      <data key="v_longitude">-118.408</data>
+      <data key="v_cat_crime">agressao leve</data>
+      <data key="v_cat_arma">Indefinido</data>
+      <data key="v_comunidade">77</data>
+    </node>
+    <edge source="n0" target="n51">
+      <data key="e_weight">0.576682955826031</data>
+    </edge>
+    <edge source="n7" target="n77">
+      <data key="e_weight">0.771265025916232</data>
+    </edge>
+    <edge source="n7" target="n41">
+      <data key="e_weight">0.737091315631396</data>
+    </edge>
+    <edge source="n19" target="n25">
+      <data key="e_weight">0.597137321059141</data>
+    </edge>
+    <edge source="n29" target="n76">
+      <data key="e_weight">0.465811983889715</data>
+    </edge>
+    <edge source="n30" target="n50">
+      <data key="e_weight">0.577760158189501</data>
+    </edge>
+    <edge source="n33" target="n42">
+      <data key="e_weight">0.543828895507859</data>
+    </edge>
+    <edge source="n41" target="n77">
+      <data key="e_weight">0.823710251530379</data>
+    </edge>
+    <edge source="n45" target="n81">
+      <data key="e_weight">0.441422420286671</data>
+    </edge>
+    <edge source="n52" target="n73">
+      <data key="e_weight">0.452187451570552</data>
+    </edge>
+    <edge source="n64" target="n69">
+      <data key="e_weight">0.83</data>
+    </edge>
+    <edge source="n80" target="n90">
+      <data key="e_weight">0.336777406134847</data>
+    </edge>
+    <edge source="n80" target="n92">
+      <data key="e_weight">0.693274835959556</data>
+    </edge>
+    <edge source="n87" target="n99">
+      <data key="e_weight">0.780696380943087</data>
+    </edge>
+    <edge source="n90" target="n92">
+      <data key="e_weight">0.376934002063382</data>
+    </edge>
+    <edge source="n90" target="n97">
+      <data key="e_weight">0.233324217039684</data>
+    </edge>
+  </graph>
+</graphml>

@@ -4,9 +4,7 @@ import pandas as pd
 categorias_crime = {
     "homicidio": [110, 113],
     "crime sexual": [121, 122, 815, 820, 821, 812, 813, 822, 845, 850, 860, 760, 762],
-    "roubo": [210, 220, 310, 320, 510, 520, 433, 330, 331, 410, 420, 421, 350, 351, 352, 353, 
-              450, 451, 452, 453, 341, 343, 345, 440, 441, 442, 443, 444, 445, 470, 471, 472, 
-              473, 474, 475, 480, 485, 487, 491, 522, 349, 446],
+    "roubo": [210, 220, 310, 320, 510, 520, 433, 330, 331, 410, 420, 421, 350, 351, 352, 353, 450, 451, 452, 453, 341, 343, 345, 440, 441, 442, 443, 444, 445, 470, 471, 472, 473, 474, 475, 480, 485, 487, 491, 522, 349, 446],
     "agressao grave": [230, 231, 235, 236, 250, 251, 761, 926],
     "agressao leve": [435, 436, 437, 622, 623, 624, 625, 626, 627, 647, 763, 928, 930],
     "vandalismo": [648, 924, 740, 745, 753, 886, 888, 755, 884, 756],
@@ -23,11 +21,11 @@ def obter_categoria(codigo_crime):
 def comparar_categorias(cat1, cat2):
     peso = 0
     if 'agressao' in cat1 and 'agressao' in cat2:
-        peso = 0.75
+        peso = 0.5
     if cat1 == cat2:
         peso = 1
     if (cat1 == 'agressao grave' and cat2 == 'homicidio') or (cat1 == 'homicidio' and cat2 == 'agressao grave'):
-        peso == 0.25
+        peso = 0.75
 
     return peso
 
@@ -115,7 +113,6 @@ def comparar_mocodes(mocodes1, mocodes2):
 
     return peso_mocodes
 
-
 armas_categorias = {
     "armas de fogo automáticas": [108.0, 114.0, 115.0, 117.0, 118.0, 119.0, 120.0, 121.0, 122.0],
     "armas de fogo semiautomáticas": [109.0, 110.0, 111.0, 113.0, 116.0, 124.0, 125.0],
@@ -127,12 +124,11 @@ armas_categorias = {
     "outros": [307.0, 500.0, 508.0, 511.0, 516.0]
 }
 
-
 def obter_categoria_arma(codigo_arma):
     print(codigo_arma)
     for categoria, codigos in armas_categorias.items():
         if codigo_arma in codigos:
-            return codigo_arma
+            return categoria
     return codigo_arma
 
 def comparar_tipos_arma(tipo1, tipo2):

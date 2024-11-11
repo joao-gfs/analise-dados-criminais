@@ -12,7 +12,7 @@ categorias_crime = {
     "golpes": [940, 662, 664, 666]
 }
 
-def obter_categoria(codigo_crime):
+def obter_cat_crime(codigo_crime):
     for categoria, codigos in categorias_crime.items():
         if codigo_crime in codigos:
             return categoria
@@ -114,29 +114,28 @@ def comparar_mocodes(mocodes1, mocodes2):
     return peso_mocodes
 
 armas_categorias = {
-    "armas de fogo automáticas": [108.0, 114.0, 115.0, 117.0, 118.0, 119.0, 120.0, 121.0, 122.0],
-    "armas de fogo semiautomáticas": [109.0, 110.0, 111.0, 113.0, 116.0, 124.0, 125.0],
+    "armas de fogo automaticas": [108.0, 114.0, 115.0, 117.0, 118.0, 119.0, 120.0, 121.0, 122.0],
+    "armas de fogo semiautomaticas": [109.0, 110.0, 111.0, 113.0, 116.0, 124.0, 125.0],
     "armas de fogo": [101.0, 102.0, 103.0, 104.0, 105.0, 106.0, 107.0],
     "objetos cortantes": [200.0, 201.0, 202.0, 203.0, 204.0, 205.0, 206.0, 207.0, 208.0, 209.0, 210.0, 212.0, 213.0, 214.0, 215.0, 216.0, 217.0, 218.0, 219.0, 220.0, 221.0, 223.0],
     "objetos contundentes": [211.0, 301.0, 300.0, 302.0, 303.0, 304.0, 305.0, 306.0, 308.0, 310.0, 312.0, 509.0, 514.0],
-    "explosivos e substâncias químicas": [501.0, 502.0, 503.0, 504.0, 505.0, 506.0, 507.0, 510.0, 512.0],
-    "força física e ameaças": [400.0, 513.0, 515.0],
+    "explosivos e substancias quimicas": [501.0, 502.0, 503.0, 504.0, 505.0, 506.0, 507.0, 510.0, 512.0],
+    "força fisica e ameacas": [400.0, 513.0, 515.0],
     "outros": [307.0, 500.0, 508.0, 511.0, 516.0]
 }
 
-def obter_categoria_arma(codigo_arma):
-    print(codigo_arma)
+def obter_cat_arma(codigo_arma):
     for categoria, codigos in armas_categorias.items():
         if codigo_arma in codigos:
             return categoria
-    return codigo_arma
+    return 'Indefinido'
 
 def comparar_tipos_arma(tipo1, tipo2):
     peso = 0
-    if tipo1 == tipo2:
+    if tipo1 == tipo2 and (tipo1 !=  'Indefinido' or tipo2 !=  'Indefinido') :
         peso = 1
-    #automáticas e semiautomáticas
-    elif (tipo1 == "armas de fogo automáticas" and tipo2 == "armas de fogo semiautomáticas") or (tipo1 == "armas de fogo semiautomáticas" and tipo2 == "armas de fogo automáticas"):
+    #automaticas e semiautomaticas
+    elif (tipo1 == "armas de fogo automaticas" and tipo2 == "armas de fogo semiautomaticas") or (tipo1 == "armas de fogo semiautomaticas" and tipo2 == "armas de fogo automaticas"):
         peso = 0.75
     #arma de fogo e outras subcategorias de armas de fogo
     elif ('armas' in tipo1 and 'armas' in tipo2):
@@ -148,4 +147,5 @@ def comparar_tipos_arma(tipo1, tipo2):
     elif ('armas' in tipo1 and 'objetos' in tipo2) or ('armas' in tipo2 and 'objetos' in tipo1):
         peso = 0.25
 
+    print(tipo1,tipo2, peso)
     return peso

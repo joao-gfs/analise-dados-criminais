@@ -12,7 +12,7 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 500
 
 # quantidade de ocorrencias para teste
-Q_OCC = 100
+Q_OCC = 200
 
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
@@ -39,9 +39,9 @@ g = ig.Graph(n=len(coord_ocorrencias))
 g.vs['latitude'] = latitudes
 g.vs['longitude'] = longitudes
 g.vs['horario'] = [fa.militar_para_timedelta(x) for x in df['TIME OCC']] # transformar horarios em timedelta (facilita cálculos)
-g.vs['cat_crime'] = [fa.obter_categoria(codigo) for codigo in df['Crm Cd']]
+g.vs['cat_crime'] = [fa.obter_cat_crime(codigo) for codigo in df['Crm Cd']]
 g.vs['mocodes'] = [str(x).split() for x in df['Mocodes']]
-g.vs['cat_arma'] = [fa.obter_categoria(codigo) for codigo in df['Weapon Used Cd']]
+g.vs['cat_arma'] = [fa.obter_cat_arma(codigo) for codigo in df['Weapon Used Cd']]
 
 g.vs['perfil_vitima'] = df.apply(
     lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), 
@@ -95,6 +95,13 @@ for i, coord in enumerate(coords_rad):
             peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
             arestas.append((i, j))
             pesos.append(peso_final)
+
+# converter dados de volta para strings
+g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
+g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
+
+# Salvar o grafo em formato GraphML
+g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_ocorrencias.graphml")
 
 # adiciona as arestas e pesos, além dos outros atributos
 g.add_edges(arestas)

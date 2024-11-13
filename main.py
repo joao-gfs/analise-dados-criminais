@@ -9,10 +9,10 @@ from geopy.distance import geodesic
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 500
+DISTANCIA_OCORRENCIAS = 250
 
 # quantidade de ocorrencias para teste
-Q_OCC = 200
+Q_OCC = 50000
 
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
@@ -42,11 +42,8 @@ g.vs['horario'] = [fa.militar_para_timedelta(x) for x in df['TIME OCC']] # trans
 g.vs['cat_crime'] = [fa.obter_cat_crime(codigo) for codigo in df['Crm Cd']]
 g.vs['mocodes'] = [str(x).split() for x in df['Mocodes']]
 g.vs['cat_arma'] = [fa.obter_cat_arma(codigo) for codigo in df['Weapon Used Cd']]
-
-g.vs['perfil_vitima'] = df.apply(
-    lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), 
-    axis=1
-).tolist()
+g.vs['crm_cods'] = df.apply(fa.obter_categorias_secundarias, axis=1)
+g.vs['perfil_vitima'] = df.apply(lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), axis=1).tolist()
 
 # listas para as arestas e pesos 
 arestas = []
@@ -90,7 +87,10 @@ for i, coord in enumerate(coords_rad):
             
             peso_arma = fa.comparar_tipos_arma(vi['cat_arma'], vj['cat_arma'])
 
-            #print(f'{i},{j} - H: {peso_horario} - V: {peso_vitima} - C: {peso_crime} - M: {peso_mocodes} - A: {peso_arma}')
+            peso_crm_cds = fa.comparar_crimes_secundarios(vi['crm_cods'], vj['crm_cods'])
+
+            if peso_crm_cds > 0:
+                print(vi['crm_cods'], vj['crm_cods'], peso_crm_cds)
 
             peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
             arestas.append((i, j))

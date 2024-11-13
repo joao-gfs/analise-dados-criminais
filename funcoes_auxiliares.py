@@ -147,5 +147,32 @@ def comparar_tipos_arma(tipo1, tipo2):
     elif ('armas' in tipo1 and 'objetos' in tipo2) or ('armas' in tipo2 and 'objetos' in tipo1):
         peso = 0.25
 
-    print(tipo1,tipo2, peso)
     return peso
+
+def comparar_crimes_secundarios(crimes1, crimes2):
+    set1 = set(crimes1)
+    set2 = set(crimes2)
+
+    crimes_em_comum = set1.intersection(set2)
+    todos_crimes = set1.union(set2)
+
+    if not todos_crimes:
+        return 0
+    
+    peso_crimes = len(crimes_em_comum) / len(todos_crimes)
+
+    return peso_crimes
+
+def obter_categorias_secundarias(codigos):
+
+    codigos = [codigos['Crm Cd 2'], codigos['Crm Cd 3'], codigos['Crm Cd 4']]
+    codigos = [codigo for codigo in codigos if pd.notna(codigo)]
+    
+    categorias = []
+    for codigo in codigos:
+        for categoria, lista_codigos in categorias_crime.items():
+            if codigo in lista_codigos:
+                categorias.append(categoria)
+                break
+
+    return list(set(categorias))

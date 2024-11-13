@@ -1,2 +1,3 @@
 dataset-filtrado.csv
+*.graphml
 __pycache__/

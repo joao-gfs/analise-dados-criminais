@@ -176,3 +176,53 @@ def obter_categorias_secundarias(codigos):
                 break
 
     return list(set(categorias))
+
+def extrair_informacoes_comunidade(n, subgrafo_comunidade):
+    
+    n_vertices = len(subgrafo_comunidade.vs)
+    n_arestas = len(subgrafo_comunidade.es)
+
+    densidade = 0
+    if n_vertices > 1:
+        densidade = 2 * n_arestas / (n_vertices * (n_vertices - 1))
+
+    latitudes = 0
+    longitudes = 0
+    categorias_crimes = {}
+    areas = set()
+    subareas = set()
+
+    for v in subgrafo_comunidade.vs:
+        categoria = v['cat_crime']
+
+        areas.add(v['area'])
+        subareas.add(int(v['cod_subarea']))
+        
+        # Atualiza a contagem de cada categoria
+        if categoria in categorias_crimes:
+            categorias_crimes[categoria] += 1
+        else:
+            categorias_crimes[categoria] = 1
+
+    # Calcula a média das coordenadas
+    media_lat = sum(subgrafo_comunidade.vs['latitude']) / n_vertices
+    media_lon = sum(subgrafo_comunidade.vs['longitude']) / n_vertices
+
+    # Calcula a porcentagem de cada categoria
+    total_crimes = n_vertices
+    porcentagens_crimes = {categoria: round((count / total_crimes), 2) for categoria, count in categorias_crimes.items()}
+
+    # Exibe os resultados com porcentagens
+    comunidade_dados = {
+            'Comunidade': n,
+            'Tamanho': n_vertices,
+            'Areas': areas,
+            'Subareas': subareas,
+            'Densidade': densidade,
+            'Lat': media_lat,
+            'Lon': media_lon,
+            'Contagem': categorias_crimes,
+            'Porcentagem': porcentagens_crimes
+        }
+    
+    return comunidade_dados

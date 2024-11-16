@@ -9,11 +9,12 @@ from geopy.distance import geodesic
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 250
+DISTANCIA_OCORRENCIAS = 200
 
 # quantidade de ocorrencias para teste
-Q_OCC = 50000
+Q_OCC = 5000
 
+print('Lendo csv')
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
 df = df.head(Q_OCC) # grafo menor para testes, remover na aplicação real
@@ -34,8 +35,11 @@ ball_tree = BallTree(coords_rad, metric='haversine')
 # define o raio de distância máxima para criar arestas num vértice (em radianos)
 raio_radianos = DISTANCIA_OCORRENCIAS / 6371000
 
-# inicializa o grafo com o número total de vértices (criar diretamente das arestas pode causar erros, principalmente de ignorar vértices sem arestas.)
+print('Criando grafo')
+# inicializa o grafo com o número total de vértices (criar o grafo diretamente das arestas pode causar erros, principalmente desconsiderar vértices sem arestas.)
 g = ig.Graph(n=len(coord_ocorrencias))
+
+#dados das ocorrencias que serão levados em conta na formação das arestas
 g.vs['latitude'] = latitudes
 g.vs['longitude'] = longitudes
 g.vs['horario'] = [fa.militar_para_timedelta(x) for x in df['TIME OCC']] # transformar horarios em timedelta (facilita cálculos)
@@ -45,13 +49,15 @@ g.vs['cat_arma'] = [fa.obter_cat_arma(codigo) for codigo in df['Weapon Used Cd']
 g.vs['crm_cods'] = df.apply(fa.obter_categorias_secundarias, axis=1)
 g.vs['perfil_vitima'] = df.apply(lambda row: fa.gerar_perfil(row['Vict Age'], row['Vict Sex'], row['Vict Descent']), axis=1).tolist()
 
-# listas para as arestas e pesos 
-arestas = []
-pesos = []
+# dados que serão usados nas análises de dados das comunidades
+g.vs['cod_area'] = np.array(df['AREA'])
+g.vs['area'] = np.array(df['AREA NAME'])
+g.vs['cod_subarea'] = np.array(df['Rpt Dist No'])
 
+print('Criando arestas')
 # para todas as ocorrências, encontrar os vizinhos na distância do raio escolhisdos
 for i, coord in enumerate(coords_rad):
-    if i % 1000 == 0:
+    if i % 200 == 0:
         print(i)
 
     vi = g.vs[i]
@@ -66,7 +72,7 @@ for i, coord in enumerate(coords_rad):
             peso_mocodes = 0 # ok
             peso_vitima = 0 # ok
             peso_arma = 0 # ok
-            peso_crm_cds = 0
+            peso_crm_cds = 0 # ok
 
             vj = g.vs[j]
 
@@ -89,30 +95,43 @@ for i, coord in enumerate(coords_rad):
 
             peso_crm_cds = fa.comparar_crimes_secundarios(vi['crm_cods'], vj['crm_cods'])
 
-            if peso_crm_cds > 0:
-                print(vi['crm_cods'], vj['crm_cods'], peso_crm_cds)
+            '''if peso_crm_cds > 0:
+                print(vi['crm_cods'], vj['crm_cods'], peso_crm_cds)'''
 
-            peso_final = peso_distancia * 0.3 + peso_horario * 0.1 + peso_crime * 0.2 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
-            arestas.append((i, j))
-            pesos.append(peso_final)
+            peso_final = peso_distancia * 0.25 + peso_horario * 0.1 + peso_crime * 0.25 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
+
+            '''print(f'D: {peso_distancia} - H: {peso_horario}')
+            print(f'C: {peso_crime} - M: {peso_mocodes}')
+            print(f'V: {peso_vitima} - A: {peso_arma}')
+            print(f'S: {peso_crm_cds}')
+            print(f'Peso final: {peso_final}')
+            print()'''
+
+            # adiciona as arestas e pesos, além dos outros atributos
+            g.add_edge(i, j, weight=peso_final)
+print(i)
 
 # converter dados de volta para strings
 g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
 g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
 
-# Salvar o grafo em formato GraphML
-g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_ocorrencias.graphml")
-
-# adiciona as arestas e pesos, além dos outros atributos
-g.add_edges(arestas)
-g.es['weight'] = pesos
-
+print('Detectando comunidades')
 # aplica o algoritmo de Louvain para identificar as comunidades
-communities = g.community_multilevel(weights=g.es['weight'])
+communities = g.community_multilevel(weights=g.es['weight'], resolution=0.9)
 
 g.vs['comunidade'] = communities.membership
-# exibir as comunidades
-#for i, community in enumerate(communities):
-#    print(f"Comunidade {i}: {community}")
 
-g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_ocorrencias.graphml")
+print('Salvando as comunidades')
+# exibir as comunidades
+comunidades_dados = []
+for i, community in enumerate(communities):
+    subgrafo = g.induced_subgraph(community)
+    infos = fa.extrair_informacoes_comunidade(i, subgrafo)
+    comunidades_dados.append(infos)
+
+df_comunidades = pd.DataFrame(comunidades_dados)
+df_comunidades.to_csv('dados/comunidades.csv', index=False)
+
+print("Dados exportados para 'comunidades.csv'")
+
+g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_90_res.graphml")

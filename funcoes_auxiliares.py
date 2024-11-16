@@ -185,13 +185,15 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
     n_arestas = len(subgrafo_comunidade.es)
     coordenadas = [(v['latitude'], v['longitude']) for v in subgrafo_comunidade.vs]
 
+    soma_pesos = sum(subgrafo_comunidade.es['weight'])
+
     densidade = 0
     if n_vertices > 1:
-        densidade = 2 * n_arestas / (n_vertices * (n_vertices - 1))
+        densidade = 2 * soma_pesos / (n_vertices * (n_vertices - 1))
 
     pontos = np.array(coordenadas)
     distancia_media = np.mean(pdist(pontos)) if len(pontos) > 1 else 0
-    densidade_espacial = 1 / distancia_media if distancia_media > 0 else 0
+    densidade_espacial = 1 / (distancia_media * 111) if distancia_media > 0 else 0# 111 pois o pdist devolve em graus de latitude que equivalem a 111 aproximadamente
 
     crimes_comunidade = {}
     armas_comunidade = {}
@@ -230,8 +232,8 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
             horarios_comunidade['Madrugada'] += 1
 
     # Calcula a média das coordenadas
-    media_lat = sum(subgrafo_comunidade.vs['latitude']) / n_vertices
-    media_lon = sum(subgrafo_comunidade.vs['longitude']) / n_vertices
+    centro_lat = sum(subgrafo_comunidade.vs['latitude']) / n_vertices
+    centro_lon = sum(subgrafo_comunidade.vs['longitude']) / n_vertices
 
     # Calcula a porcentagem de cada categoria
     total_crimes = n_vertices
@@ -245,13 +247,24 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
             'Tamanho': n_vertices,
             'Densidade': densidade,
             'Densidade Espacial': densidade_espacial,
-            'Lat': media_lat,
-            'Lon': media_lon,
+            'Fator escolha': n_vertices * densidade * densidade_espacial,
+            'Lat': centro_lat,
+            'Lon': centro_lon,
             'Porcentagem Crimes': porcentagens_crimes,
             'Porcentagem Armas': porcentagens_armas,
             'Porcentagem Horarios': porcentagens_horarios,
             'Areas': areas,
             'Subareas': subareas,
         }
+    
+    """if comunidade_dados['Tamanho'] > 20:
+        print(f'Comunidade {comunidade_dados["Comunidade"]}:')
+        print(f'\tTamanho: {comunidade_dados["Tamanho"]} - D: {comunidade_dados["Densidade"]} - DE: {comunidade_dados["Densidade Espacial"]}')
+        print(f'\t{comunidade_dados["Areas"]}')
+        print(f'\t{comunidade_dados["Subareas"]}')
+        print(f'\t{comunidade_dados["Porcentagem Crimes"]}')
+        print(f'\t{comunidade_dados["Porcentagem Armas"]}')
+        print(f'\t{comunidade_dados["Porcentagem Horarios"]}')
+        print()"""
     
     return comunidade_dados

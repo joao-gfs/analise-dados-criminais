@@ -5,6 +5,7 @@ import numpy as np
 from math import exp
 from sklearn.neighbors import BallTree
 from geopy.distance import geodesic
+from sklearn.preprocessing import MinMaxScaler
 
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
@@ -12,12 +13,12 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 250
 
 # quantidade de ocorrencias para teste
-Q_OCC = 10000
+Q_OCC = 50000
 
 print('Lendo csv')
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
-df = df.head(Q_OCC) # grafo menor para testes, remover na aplicação real
+df = df.sample(n=Q_OCC).reset_index(drop=True) # grafo menor para testes, remover na aplicação real
 
 latitudes = np.array(df['LAT'])
 longitudes = np.array(df['LON'])
@@ -120,19 +121,40 @@ g.es['weight'] = pesos
 
 print('Detectando comunidades')
 # aplica o algoritmo de Louvain para identificar as comunidades
-communities = g.community_multilevel(weights=g.es['weight'], resolution=1)
+comunidades_detectadas = g.community_multilevel(weights=g.es['weight'], resolution=0.85)
 
-g.vs['comunidade'] = communities.membership
+g.vs['comunidade'] = comunidades_detectadas.membership
 
 print('Salvando as comunidades')
+
 # exibir as comunidades
 comunidades_dados = []
-for i, community in enumerate(communities):
-    subgrafo = g.induced_subgraph(community)
-    infos = fa.extrair_informacoes_comunidade(i, subgrafo)
-    comunidades_dados.append(infos)
+for i, comunidade in enumerate(comunidades_detectadas):
+    subgrafo = g.induced_subgraph(comunidade)
+    comunidade_dados = fa.extrair_informacoes_comunidade(i, subgrafo)
+    comunidades_dados.append(comunidade_dados)
 
 df_comunidades = pd.DataFrame(comunidades_dados)
+
+# normalização das medidas de seleção das comunidades
+colunas = ['Tamanho', 'Densidade', 'Densidade Espacial']
+scaler = MinMaxScaler()
+df_comunidades[[f'{col}_normalizado' for col in colunas]] = scaler.fit_transform(df_comunidades[colunas])
+df_comunidades[[f'{col}_normalizado' for col in colunas]] = scaler.fit_transform(df_comunidades[colunas])
+    
+pesos = {'Tamanho': 0.20, 'Densidade': 0.40, 'Densidade Espacial': 0.40}
+df_comunidades['Fator escolha ajustado'] = (
+        pesos['Tamanho'] * df_comunidades['Tamanho_normalizado'] +
+        pesos['Densidade'] * df_comunidades['Densidade_normalizado'] +
+        pesos['Densidade Espacial'] * df_comunidades['Densidade Espacial_normalizado']
+    )
+
+comunidades_prioritarias = df_comunidades[(df_comunidades['Fator escolha ajustado'] >= 0.0) & (df_comunidades['Tamanho'] > 150)]
+comunidades_prioritarias = comunidades_prioritarias.sort_values('Fator escolha ajustado', ascending=False)
+
+x = comunidades_prioritarias.head(5)
+print(x[['Comunidade', 'Tamanho','Densidade', 'Densidade Espacial', 'Fator escolha ajustado', 'Areas']])
+
 df_comunidades.to_csv('dados/comunidades.csv', index=False)
 
 print("Dados exportados para 'comunidades.csv'")
@@ -141,4 +163,4 @@ print("Dados exportados para 'comunidades.csv'")
 g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
 g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
 
-g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_100_res.graphml")
+g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_sample.graphml")

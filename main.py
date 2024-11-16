@@ -9,10 +9,10 @@ from geopy.distance import geodesic
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 200
+DISTANCIA_OCORRENCIAS = 250
 
 # quantidade de ocorrencias para teste
-Q_OCC = 5000
+Q_OCC = 20000
 
 print('Lendo csv')
 # carrega os dados do dataset já filtrado
@@ -56,6 +56,9 @@ g.vs['cod_subarea'] = np.array(df['Rpt Dist No'])
 
 print('Criando arestas')
 # para todas as ocorrências, encontrar os vizinhos na distância do raio escolhisdos
+
+arestas = []
+pesos = []
 for i, coord in enumerate(coords_rad):
     if i % 200 == 0:
         print(i)
@@ -108,8 +111,12 @@ for i, coord in enumerate(coords_rad):
             print()'''
 
             # adiciona as arestas e pesos, além dos outros atributos
-            g.add_edge(i, j, weight=peso_final)
+            arestas.append((i,j))
+            pesos.append(peso_final)
 print(i)
+
+g.add_edges(arestas)
+g.es['weight'] = pesos
 
 # converter dados de volta para strings
 g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
@@ -117,7 +124,7 @@ g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['moc
 
 print('Detectando comunidades')
 # aplica o algoritmo de Louvain para identificar as comunidades
-communities = g.community_multilevel(weights=g.es['weight'], resolution=0.9)
+communities = g.community_multilevel(weights=g.es['weight'], resolution=1)
 
 g.vs['comunidade'] = communities.membership
 
@@ -134,4 +141,4 @@ df_comunidades.to_csv('dados/comunidades.csv', index=False)
 
 print("Dados exportados para 'comunidades.csv'")
 
-g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_90_res.graphml")
+g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_100_res.graphml")

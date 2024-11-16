@@ -1,5 +1,7 @@
 from datetime import timedelta
 import pandas as pd
+from scipy.spatial.distance import pdist
+import numpy as np
 
 categorias_crime = {
     "homicidio": [110, 113],
@@ -181,13 +183,16 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
     
     n_vertices = len(subgrafo_comunidade.vs)
     n_arestas = len(subgrafo_comunidade.es)
+    coordenadas = [(v['latitude'], v['longitude']) for v in subgrafo_comunidade.vs]
 
     densidade = 0
     if n_vertices > 1:
         densidade = 2 * n_arestas / (n_vertices * (n_vertices - 1))
 
-    latitudes = 0
-    longitudes = 0
+    pontos = np.array(coordenadas)
+    distancia_media = np.mean(pdist(pontos))
+    densidade_espacial = 1 / distancia_media if distancia_media > 0 else 0
+
     categorias_crimes = {}
     areas = set()
     subareas = set()
@@ -216,13 +221,14 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
     comunidade_dados = {
             'Comunidade': n,
             'Tamanho': n_vertices,
-            'Areas': areas,
-            'Subareas': subareas,
             'Densidade': densidade,
+            'Densidade Espacial': densidade_espacial,
             'Lat': media_lat,
             'Lon': media_lon,
+            'Porcentagem': porcentagens_crimes,
             'Contagem': categorias_crimes,
-            'Porcentagem': porcentagens_crimes
+            'Areas': areas,
+            'Subareas': subareas,
         }
     
     return comunidade_dados

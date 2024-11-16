@@ -190,24 +190,44 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
         densidade = 2 * n_arestas / (n_vertices * (n_vertices - 1))
 
     pontos = np.array(coordenadas)
-    distancia_media = np.mean(pdist(pontos))
+    distancia_media = np.mean(pdist(pontos)) if len(pontos) > 1 else 0
     densidade_espacial = 1 / distancia_media if distancia_media > 0 else 0
 
-    categorias_crimes = {}
+    crimes_comunidade = {}
+    armas_comunidade = {}
+    horarios_comunidade = {'Manha': 0, 'Tarde': 0, 'Noite': 0, 'Madrugada': 0}
     areas = set()
     subareas = set()
 
     for v in subgrafo_comunidade.vs:
         categoria = v['cat_crime']
+        arma = v['cat_arma']
 
         areas.add(v['area'])
         subareas.add(int(v['cod_subarea']))
         
-        # Atualiza a contagem de cada categoria
-        if categoria in categorias_crimes:
-            categorias_crimes[categoria] += 1
+        # Atualiza a contagem de categorias de crime
+        if categoria in crimes_comunidade:
+            crimes_comunidade[categoria] += 1
         else:
-            categorias_crimes[categoria] = 1
+            crimes_comunidade[categoria] = 1
+
+        # Atualiza a contagem de tipo de arma
+        if arma in armas_comunidade:
+            armas_comunidade[arma] += 1
+        else:
+            armas_comunidade[arma] = 1
+
+        
+        hora = int(v['horario'].total_seconds() // 3600) % 24  # Extrai a hora de timedelta
+        if 6 <= hora < 12:  
+            horarios_comunidade['Manha'] += 1
+        elif 12 <= hora < 18:  
+            horarios_comunidade['Tarde'] += 1
+        elif 18 <= hora < 24:  
+            horarios_comunidade['Noite'] += 1
+        else: 
+            horarios_comunidade['Madrugada'] += 1
 
     # Calcula a média das coordenadas
     media_lat = sum(subgrafo_comunidade.vs['latitude']) / n_vertices
@@ -215,7 +235,9 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
 
     # Calcula a porcentagem de cada categoria
     total_crimes = n_vertices
-    porcentagens_crimes = {categoria: round((count / total_crimes), 2) for categoria, count in categorias_crimes.items()}
+    porcentagens_crimes = {categoria: round((count / total_crimes), 3) for categoria, count in crimes_comunidade.items()}
+    porcentagens_armas = {arma: round((count /total_crimes), 3) for arma, count in armas_comunidade.items()}
+    porcentagens_horarios = {periodo: round((count / total_crimes), 3) for periodo, count in horarios_comunidade.items()}
 
     # Exibe os resultados com porcentagens
     comunidade_dados = {
@@ -225,8 +247,9 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
             'Densidade Espacial': densidade_espacial,
             'Lat': media_lat,
             'Lon': media_lon,
-            'Porcentagem': porcentagens_crimes,
-            'Contagem': categorias_crimes,
+            'Porcentagem Crimes': porcentagens_crimes,
+            'Porcentagem Armas': porcentagens_armas,
+            'Porcentagem Horarios': porcentagens_horarios,
             'Areas': areas,
             'Subareas': subareas,
         }

@@ -12,7 +12,7 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 250
 
 # quantidade de ocorrencias para teste
-Q_OCC = 20000
+Q_OCC = 10000
 
 print('Lendo csv')
 # carrega os dados do dataset já filtrado
@@ -118,10 +118,6 @@ print(i)
 g.add_edges(arestas)
 g.es['weight'] = pesos
 
-# converter dados de volta para strings
-g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
-g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
-
 print('Detectando comunidades')
 # aplica o algoritmo de Louvain para identificar as comunidades
 communities = g.community_multilevel(weights=g.es['weight'], resolution=1)
@@ -140,5 +136,9 @@ df_comunidades = pd.DataFrame(comunidades_dados)
 df_comunidades.to_csv('dados/comunidades.csv', index=False)
 
 print("Dados exportados para 'comunidades.csv'")
+
+# converter dados de volta para strings
+g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
+g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
 
 g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_100_res.graphml")

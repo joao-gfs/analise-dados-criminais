@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 250
+DISTANCIA_OCORRENCIAS = 200
 
 # quantidade de ocorrencias para teste
 Q_OCC = 50000
@@ -99,17 +99,7 @@ for i, coord in enumerate(coords_rad):
 
             peso_crm_cds = fa.comparar_crimes_secundarios(vi['crm_cods'], vj['crm_cods'])
 
-            '''if peso_crm_cds > 0:
-                print(vi['crm_cods'], vj['crm_cods'], peso_crm_cds)'''
-
             peso_final = peso_distancia * 0.25 + peso_horario * 0.1 + peso_crime * 0.25 + peso_mocodes * 0.1 + peso_vitima * 0.1 + peso_arma * 0.15 + peso_crm_cds * 0.05
-
-            '''print(f'D: {peso_distancia} - H: {peso_horario}')
-            print(f'C: {peso_crime} - M: {peso_mocodes}')
-            print(f'V: {peso_vitima} - A: {peso_arma}')
-            print(f'S: {peso_crm_cds}')
-            print(f'Peso final: {peso_final}')
-            print()'''
 
             # adiciona as arestas e pesos, além dos outros atributos
             arestas.append((i,j))
@@ -149,18 +139,32 @@ df_comunidades['Fator escolha ajustado'] = (
         pesos['Densidade Espacial'] * df_comunidades['Densidade Espacial_normalizado']
     )
 
-comunidades_prioritarias = df_comunidades[(df_comunidades['Fator escolha ajustado'] >= 0.0) & (df_comunidades['Tamanho'] > 150)]
+pontos_focais = df_comunidades[(df_comunidades['Fator escolha ajustado'] >= 0.2) & (df_comunidades['Tamanho'] >= 100) & (df_comunidades['Tamanho'] < 300)]
+comunidades_prioritarias = pontos_focais.sort_values('Fator escolha ajustado', ascending=False)
+
+comunidades_prioritarias = df_comunidades[(df_comunidades['Fator escolha ajustado'] >= 0.15) & (df_comunidades['Tamanho'] >= 300)]
 comunidades_prioritarias = comunidades_prioritarias.sort_values('Fator escolha ajustado', ascending=False)
 
+z = pontos_focais.head(5)
 x = comunidades_prioritarias.head(5)
+
+print('Pontos Focais: ')
+print(z[['Comunidade', 'Tamanho','Densidade', 'Densidade Espacial', 'Fator escolha ajustado', 'Areas']])
+
+print('Comunidades prioritarias')
 print(x[['Comunidade', 'Tamanho','Densidade', 'Densidade Espacial', 'Fator escolha ajustado', 'Areas']])
 
-df_comunidades.to_csv('dados/comunidades.csv', index=False)
+print(len(comunidades_detectadas), len(pontos_focais), len(comunidades_prioritarias))
 
-print("Dados exportados para 'comunidades.csv'")
+df_comunidades.to_csv('dados/comunidades.csv', index=False)
+comunidades_prioritarias.to_csv('dados/prioritarias.csv', index=False)
+pontos_focais.to_csv('dados/pontos_focais.csv', index=False)
+
+print("Dados exportados para: 'comunidades.csv'")
 
 # converter dados de volta para strings
 g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
 g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
 
 g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_sample.graphml")
+print(f"Grafo exportado para: grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_sample.graphml")

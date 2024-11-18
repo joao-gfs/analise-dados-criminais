@@ -182,7 +182,6 @@ def obter_categorias_secundarias(codigos):
 def extrair_informacoes_comunidade(n, subgrafo_comunidade):
     
     n_vertices = len(subgrafo_comunidade.vs)
-    n_arestas = len(subgrafo_comunidade.es)
     coordenadas = [(v['latitude'], v['longitude']) for v in subgrafo_comunidade.vs]
 
     soma_pesos = sum(subgrafo_comunidade.es['weight'])
@@ -193,7 +192,7 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
 
     pontos = np.array(coordenadas)
     distancia_media = np.mean(pdist(pontos)) if len(pontos) > 1 else 0
-    densidade_espacial = 1 / (distancia_media * 111) if distancia_media > 0 else 0# 111 pois o pdist devolve em graus de latitude que equivalem a 111 aproximadamente
+    densidade_espacial = abs(1 / (distancia_media * 111)) if distancia_media != 0 else 0# 111 pois o pdist devolve em graus de latitude que equivalem a 111 aproximadamente
 
     crimes_comunidade = {}
     armas_comunidade = {}
@@ -247,7 +246,6 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
             'Tamanho': n_vertices,
             'Densidade': densidade,
             'Densidade Espacial': densidade_espacial,
-            'Fator escolha': n_vertices * densidade * densidade_espacial,
             'Lat': centro_lat,
             'Lon': centro_lon,
             'Porcentagem Crimes': porcentagens_crimes,
@@ -256,15 +254,5 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
             'Areas': areas,
             'Subareas': subareas,
         }
-    
-    """if comunidade_dados['Tamanho'] > 20:
-        print(f'Comunidade {comunidade_dados["Comunidade"]}:')
-        print(f'\tTamanho: {comunidade_dados["Tamanho"]} - D: {comunidade_dados["Densidade"]} - DE: {comunidade_dados["Densidade Espacial"]}')
-        print(f'\t{comunidade_dados["Areas"]}')
-        print(f'\t{comunidade_dados["Subareas"]}')
-        print(f'\t{comunidade_dados["Porcentagem Crimes"]}')
-        print(f'\t{comunidade_dados["Porcentagem Armas"]}')
-        print(f'\t{comunidade_dados["Porcentagem Horarios"]}')
-        print()"""
-    
+
     return comunidade_dados

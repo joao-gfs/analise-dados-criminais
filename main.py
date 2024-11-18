@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 200
+DISTANCIA_OCORRENCIAS = 250
 
 # quantidade de ocorrencias para teste
 Q_OCC = 50000
@@ -18,6 +18,8 @@ Q_OCC = 50000
 print('Lendo csv')
 # carrega os dados do dataset já filtrado
 df = pd.read_csv('dados/dataset-filtrado.csv')
+
+np.random.seed(1)
 df = df.sample(n=Q_OCC).reset_index(drop=True) # grafo menor para testes, remover na aplicação real
 
 latitudes = np.array(df['LAT'])
@@ -111,7 +113,7 @@ g.es['weight'] = pesos
 
 print('Detectando comunidades')
 # aplica o algoritmo de Louvain para identificar as comunidades
-comunidades_detectadas = g.community_multilevel(weights=g.es['weight'], resolution=0.85)
+comunidades_detectadas = g.community_multilevel(weights=g.es['weight'], resolution=0.8)
 
 g.vs['comunidade'] = comunidades_detectadas.membership
 
@@ -130,41 +132,71 @@ df_comunidades = pd.DataFrame(comunidades_dados)
 colunas = ['Tamanho', 'Densidade', 'Densidade Espacial']
 scaler = MinMaxScaler()
 df_comunidades[[f'{col}_normalizado' for col in colunas]] = scaler.fit_transform(df_comunidades[colunas])
-df_comunidades[[f'{col}_normalizado' for col in colunas]] = scaler.fit_transform(df_comunidades[colunas])
-    
-pesos = {'Tamanho': 0.20, 'Densidade': 0.40, 'Densidade Espacial': 0.40}
-df_comunidades['Fator escolha ajustado'] = (
+
+pesos = {'Tamanho': 0, 'Densidade': 0.5, 'Densidade Espacial': 0.5}
+df_comunidades['Fator escolha'] = (
         pesos['Tamanho'] * df_comunidades['Tamanho_normalizado'] +
         pesos['Densidade'] * df_comunidades['Densidade_normalizado'] +
         pesos['Densidade Espacial'] * df_comunidades['Densidade Espacial_normalizado']
     )
 
-pontos_focais = df_comunidades[(df_comunidades['Fator escolha ajustado'] >= 0.2) & (df_comunidades['Tamanho'] >= 100) & (df_comunidades['Tamanho'] < 300)]
-comunidades_prioritarias = pontos_focais.sort_values('Fator escolha ajustado', ascending=False)
+pontos_focais = df_comunidades[(df_comunidades['Fator escolha'] >= 0.1) & (df_comunidades['Tamanho'] >= Q_OCC * 0.002) & (df_comunidades['Tamanho'] < Q_OCC * 0.009)]
+areas_prioritarias = pontos_focais.sort_values('Fator escolha', ascending=False)
 
-comunidades_prioritarias = df_comunidades[(df_comunidades['Fator escolha ajustado'] >= 0.15) & (df_comunidades['Tamanho'] >= 300)]
-comunidades_prioritarias = comunidades_prioritarias.sort_values('Fator escolha ajustado', ascending=False)
+areas_prioritarias = df_comunidades[(df_comunidades['Fator escolha'] >= 0.0105) & (df_comunidades['Tamanho'] >= Q_OCC * 0.009)]
+areas_prioritarias = areas_prioritarias.sort_values('Fator escolha', ascending=False)
+
+areas_atencao = df_comunidades[(df_comunidades['Fator escolha'] >= 0.005) & (df_comunidades['Fator escolha'] < 0.0105) & (df_comunidades['Tamanho'] >= Q_OCC * 0.01)]
+areas_atencao = areas_atencao.sort_values('Fator escolha', ascending=False)
 
 z = pontos_focais.head(5)
-x = comunidades_prioritarias.head(5)
+x = areas_prioritarias.head(5)
 
-print('Pontos Focais: ')
-print(z[['Comunidade', 'Tamanho','Densidade', 'Densidade Espacial', 'Fator escolha ajustado', 'Areas']])
-
-print('Comunidades prioritarias')
-print(x[['Comunidade', 'Tamanho','Densidade', 'Densidade Espacial', 'Fator escolha ajustado', 'Areas']])
-
-print(len(comunidades_detectadas), len(pontos_focais), len(comunidades_prioritarias))
+print('Comunidades filtradas')
 
 df_comunidades.to_csv('dados/comunidades.csv', index=False)
-comunidades_prioritarias.to_csv('dados/prioritarias.csv', index=False)
+areas_prioritarias.to_csv('dados/prioritarias.csv', index=False)
 pontos_focais.to_csv('dados/pontos_focais.csv', index=False)
+areas_atencao.to_csv('dados/areas_atencao.csv', index=False)
 
 print("Dados exportados para: 'comunidades.csv'")
+
+comunidades_selecionadas = pd.concat([pontos_focais, areas_prioritarias, areas_atencao])
+
+for i, comunidade in comunidades_selecionadas.iterrows():
+    g.add_vertex(f'com_{comunidade["Comunidade"]}')
+
+    novo_vertice_idx = g.vs.find(name=f'com_{comunidade["Comunidade"]}').index
+
+    g.vs[novo_vertice_idx]['latitude'] = comunidade['Lat']
+    g.vs[novo_vertice_idx]['longitude'] = comunidade['Lon']
+    g.vs[novo_vertice_idx]['titulo'] = comunidade['Comunidade']
+
+comunidades_pontos_focais = set(pontos_focais['Comunidade'])
+comunidades_areas_prioritarias = set(areas_prioritarias['Comunidade'])
+comunidades_areas_atencao = set(areas_atencao['Comunidade'])
+
+# Atribui o tipo de comunidade aos vértices
+tipo_comunidade = []
+
+for v in g.vs:
+    comunidade = v['comunidade']
+
+    if comunidade in comunidades_pontos_focais:
+        tipo_comunidade.append('ponto focal')
+    elif comunidade in comunidades_areas_prioritarias:
+        tipo_comunidade.append('area prioritaria')
+    elif comunidade in comunidades_areas_atencao:
+        tipo_comunidade.append('area atencao')
+    else:
+        tipo_comunidade.append('comum')
+
+# Adiciona o atributo ao grafo
+g.vs['tipo_comunidade'] = tipo_comunidade
 
 # converter dados de volta para strings
 g.vs['horario'] = [str(horario) for horario in g.vs['horario']]
 g.vs['mocodes'] = [",".join(mocodes) if mocodes else "" for mocodes in g.vs['mocodes']]
 
-g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_sample.graphml")
+g.write_graphml(f"grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_sample_sem_tam.graphml")
 print(f"Grafo exportado para: grafos_modelados/grafo_{DISTANCIA_OCORRENCIAS}m_{Q_OCC}_occ_sample.graphml")

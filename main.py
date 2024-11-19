@@ -1,4 +1,5 @@
 import funcoes_auxiliares as fa
+from analise_dados import descrever_comunidades
 import igraph as ig
 import pandas as pd
 import numpy as np
@@ -13,7 +14,7 @@ ALPHA_TEMPO = 0.15
 DISTANCIA_OCORRENCIAS = 250
 
 # quantidade de ocorrencias para teste
-Q_OCC = 50000
+Q_OCC = 15000
 
 print('Lendo csv')
 # carrega os dados do dataset já filtrado
@@ -63,8 +64,8 @@ print('Criando arestas')
 arestas = []
 pesos = []
 for i, coord in enumerate(coords_rad):
-    if i % 200 == 0:
-        print(i)
+    #if i % 200 == 0:
+    #    print(i)
 
     vi = g.vs[i]
 
@@ -158,6 +159,8 @@ df_comunidades.to_csv('dados/comunidades.csv', index=False)
 areas_prioritarias.to_csv('dados/prioritarias.csv', index=False)
 pontos_focais.to_csv('dados/pontos_focais.csv', index=False)
 areas_atencao.to_csv('dados/areas_atencao.csv', index=False)
+
+descrever_comunidades(areas_prioritarias, areas_atencao, pontos_focais)
 
 print("Dados exportados para: 'comunidades.csv'")
 

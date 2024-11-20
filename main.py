@@ -1,5 +1,4 @@
 import funcoes_auxiliares as fa
-from analise_dados import descrever_comunidades
 import igraph as ig
 import pandas as pd
 import numpy as np
@@ -11,10 +10,10 @@ from sklearn.preprocessing import MinMaxScaler
 # valor de ajuste para calculo não linear da distancia temporal
 ALPHA_TEMPO = 0.15
 # Distancia máxima para conexão de ocorrencias (vertices)
-DISTANCIA_OCORRENCIAS = 250
+DISTANCIA_OCORRENCIAS = 500
 
 # quantidade de ocorrencias para teste
-Q_OCC = 15000
+Q_OCC = 1000
 
 print('Lendo csv')
 # carrega os dados do dataset já filtrado
@@ -64,8 +63,8 @@ print('Criando arestas')
 arestas = []
 pesos = []
 for i, coord in enumerate(coords_rad):
-    #if i % 200 == 0:
-    #    print(i)
+    if i % 200 == 0:
+        print(i)
 
     vi = g.vs[i]
 
@@ -160,10 +159,9 @@ areas_prioritarias.to_csv('dados/prioritarias.csv', index=False)
 pontos_focais.to_csv('dados/pontos_focais.csv', index=False)
 areas_atencao.to_csv('dados/areas_atencao.csv', index=False)
 
-descrever_comunidades(areas_prioritarias, areas_atencao, pontos_focais)
-
 print("Dados exportados para: 'comunidades.csv'")
-
+print("Relatórios exportados para: 'relatorio_comunidades.pdf'")
+fa.gerar_todos_relatorios()
 comunidades_selecionadas = pd.concat([pontos_focais, areas_prioritarias, areas_atencao])
 
 for i, comunidade in comunidades_selecionadas.iterrows():

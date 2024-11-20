@@ -1,7 +1,16 @@
-from datetime import timedelta
 import pandas as pd
-from scipy.spatial.distance import pdist
 import numpy as np
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Table, TableStyle, Paragraph
+import matplotlib.pyplot as plt
+import io
+from PIL import Image
+from pdfrw import PdfReader, PdfWriter, PageMerge
+from datetime import timedelta
+from scipy.spatial.distance import pdist
 
 categorias_crime = {
     "homicidio": [110, 113],
@@ -256,3 +265,94 @@ def extrair_informacoes_comunidade(n, subgrafo_comunidade):
         }
 
     return comunidade_dados
+
+
+
+def gerar_relatorio_comunidades(arquivo_csv, titulo):
+    # Ler o CSV e processar as comunidades
+    df = pd.read_csv(arquivo_csv)
+
+    # Ordenar as comunidades por densidade e pegar as 10 maiores
+    top_10_comunidades = df.sort_values(by='Densidade', ascending=False).head(10)
+
+    # Gerar o relatório em PDF
+    report_pdf = f"relatorio_{titulo.lower().replace(' ', '_')}.pdf"
+    c = canvas.Canvas(report_pdf, pagesize=letter)
+    width, height = letter
+
+    # Adicionar cabeçalho
+    styles = getSampleStyleSheet()
+    header = Paragraph(titulo, styles['Title'])
+    header.wrapOn(c, width - 60, height)
+    header.drawOn(c, 30, height - 50)
+
+    y_position = height - 100  # Posição inicial
+
+    def criar_tabela_comunidade(row):
+        tabela_dados = [["Comunidade", "Densidade", "Densidade Espacial", "Tamanho", "Lat", "Lon"]]
+        tabela_dados.append([
+            row["Comunidade"],
+            f"{row['Densidade']:.4f}",  
+            f"{row['Densidade Espacial']:.4f}",  
+            int(row["Tamanho"]),
+            f"{row['Lat']:.6f}",
+            f"{row['Lon']:.6f}"
+        ])
+
+        table = Table(tabela_dados, colWidths=[100, 80, 120, 80, 60, 60])
+        style = TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ])
+        table.setStyle(style)
+        return table
+
+    def adicionar_grafico(dados, titulo_grafico):
+        nonlocal y_position
+        if y_position < 400:
+            c.showPage()
+            y_position = height - 50
+
+        fig, ax = plt.subplots()
+        ax.pie(dados.values(), labels=dados.keys(), autopct="%1.1f%%", startangle=140)
+        ax.set_title(titulo_grafico)
+        
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png", dpi=150)
+        buf.seek(0)
+
+        img = Image.open(buf)
+        img_width, img_height = img.size
+        aspect = img_height / img_width
+        c.drawInlineImage(img, (width - 400) / 2, y_position - 200, width=400, height=400 * aspect)
+
+        buf.close()
+        plt.close(fig)
+        y_position -= 300
+
+    for _, row in top_10_comunidades.iterrows():
+        table = criar_tabela_comunidade(row)
+        table.wrapOn(c, width - 60, height)
+        table.drawOn(c, 30, y_position)
+        y_position -= 120
+
+        adicionar_grafico(eval(row["Porcentagem Crimes"]), f"Porcentagem de Crimes - Comunidade {row['Comunidade']}")
+        adicionar_grafico(eval(row["Porcentagem Armas"]), f"Porcentagem de Armas - Comunidade {row['Comunidade']}")
+        adicionar_grafico(eval(row["Porcentagem Horarios"]), f"Porcentagem de Horários - Comunidade {row['Comunidade']}")
+
+    # Salvar PDF
+    c.save()
+
+
+
+    
+def gerar_todos_relatorios():
+    gerar_relatorio_comunidades('dados/comunidades.csv', 'Comunidades')
+    gerar_relatorio_comunidades('dados/pontos_focais.csv', 'Pontos Focais')
+    gerar_relatorio_comunidades('dados/prioritarias.csv', 'Áreas Prioritárias')
+    gerar_relatorio_comunidades('dados/areas_atencao.csv', 'Áreas de Atenção')
